@@ -1,12 +1,16 @@
-package com.example.cherry.ui.theme.screens.wishlist
+@file:OptIn(ExperimentalMaterial3Api::class)
+
+package com.example.shopcart.ui.screens.wishlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,101 +23,100 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.cherry.R
 
-data class Product(val name: String, val price: String, val imageResId: Int)
+data class WishlistProduct(
+    val name: String,
+    val priceKsh: String,
+    val imageRes: Int
+)
 
 @Composable
-fun WishlistScreen(navController: NavController) {
-    val productWishlist = remember {
-        mutableStateListOf(
-            Product("Stylish Red Dress", "$49.99", R.drawable.dress1),
-            Product("Classic Black Shoes", "$39.99", R.drawable.dress1),
-            Product("Luxury Leather Bag", "$89.99", R.drawable.dress1)
-        )
-    }
+fun WishlistScreen(navController: NavController = rememberNavController()) {
+    val wishlistItems = listOf(
+        WishlistProduct("Elegant Dress", "Ksh 4,999", R.drawable.dress1),
+        WishlistProduct("Chic Grad Dress", "Ksh 8,999", R.drawable.dress2),
+        WishlistProduct("Elegant Lace", "Ksh 8,500", R.drawable.dress3),
+        WishlistProduct("Lime Green Dress", "Ksh 7,500", R.drawable.dress4),
+        WishlistProduct("Pink Floral Dress", "Ksh 4,999", R.drawable.dress5),
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Screen title
-        Text(
-            text = "Your Wishlist",
-            fontSize = 32.sp,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Sample product image (header)
-        Image(
-            painter = painterResource(id = R.drawable.dress1),  // Replace with a placeholder or actual dynamic image
-            contentDescription = "Product Image",
+    Scaffold(
+        containerColor = Color.White,
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Your Wishlist",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFD4A5A5),
+                    titleContentColor = Color.White
+                )
+            )
+        }
+    ) { padding ->
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(bottom = 16.dp)
-        )
-
-        // Text to show the added products list
-        Text(
-            text = "Added Products",
-            fontSize = 24.sp,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        // LazyColumn to display the list of added products
-        LazyColumn {
-            items(productWishlist) { item ->
-                WishlistItem(product = item, onRemove = { productWishlist.remove(item) })
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(padding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(wishlistItems) { product ->
+                WishlistCard(product)
             }
         }
     }
 }
 
 @Composable
-fun WishlistItem(product: Product, onRemove: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+fun WishlistCard(product: WishlistProduct) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFCEEEE)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = MaterialTheme.shapes.medium
     ) {
-        // Product Image
-        Image(
-            painter = painterResource(id = product.imageResId),
-            contentDescription = product.name,
+        Row(
             modifier = Modifier
-                .size(80.dp)
-                .padding(end = 16.dp)
-        )
-
-        // Product Details (Name, Price)
-        Column(
-            modifier = Modifier.weight(1f)
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = product.name,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+            Image(
+                painter = painterResource(id = product.imageRes),
+                contentDescription = product.name,
+                modifier = Modifier
+                    .size(80.dp)
+                    .padding(end = 16.dp)
             )
-            Text(
-                text = product.price,
-                fontSize = 16.sp,
-                color = Color.Gray
-            )
-        }
 
-        // Remove Button
-        IconButton(onClick = onRemove) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = product.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.Black
+                )
+                Text(
+                    text = product.priceKsh,
+                    color = Color.DarkGray,
+                    fontSize = 16.sp
+                )
+            }
+
             Icon(
-                painter = painterResource(id = R.drawable.ic_remove),  // Replace with actual remove icon
-                contentDescription = "Remove Product",
-                tint = Color.Red
+                imageVector = Icons.Default.Favorite,
+                contentDescription = "Wishlist Icon",
+                tint = Color.Red,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
@@ -122,5 +125,6 @@ fun WishlistItem(product: Product, onRemove: () -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun WishlistScreenPreview() {
-    WishlistScreen(rememberNavController())
+    WishlistScreen()
 }
+

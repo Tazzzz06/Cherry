@@ -1,7 +1,11 @@
 package com.example.cherry.ui.theme.screens.dashboard
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cherry.R
 import com.example.cherry.navigation.ROUTE_ADD_PRODUCTS
 import com.google.firebase.auth.FirebaseAuth
+
+data class DressItem(val name: String, val imageRes: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,28 +37,14 @@ fun DashboardScreen(
     val elegantFont = FontFamily.Serif
     val accentColor = Color(0xFFD4A5A5)
 
+    val dresses = listOf(
+        DressItem("Red Summer Dress", R.drawable.dress1),
+        DressItem("Blue Maxi Dress", R.drawable.dress2),
+        DressItem("Classic White", R.drawable.dress3),
+        DressItem("Floral Elegance", R.drawable.dress4)
+    )
+
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "CHERRY",
-                            fontFamily = elegantFont,
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = accentColor
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White
-                )
-            )
-        },
         bottomBar = {
             BottomAppBar(
                 containerColor = Color.White,
@@ -59,11 +52,7 @@ fun DashboardScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
 
-                // Products
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                     IconButton(onClick = { navController.navigate(ROUTE_ADD_PRODUCTS) }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_products),
@@ -74,11 +63,7 @@ fun DashboardScreen(
                     Text("Products", fontSize = 12.sp, color = accentColor)
                 }
 
-                // Wishlist
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                     IconButton(onClick = onGoToWishlist) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_wishlist),
@@ -89,11 +74,7 @@ fun DashboardScreen(
                     Text("Wishlist", fontSize = 12.sp, color = accentColor)
                 }
 
-                // Account
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                     IconButton(onClick = {
                         val currentUser = FirebaseAuth.getInstance().currentUser
                         if (currentUser == null) {
@@ -111,11 +92,7 @@ fun DashboardScreen(
                     Text("Account", fontSize = 12.sp, color = accentColor)
                 }
 
-                // Logout
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
                     IconButton(onClick = onLogOut) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_logout),
@@ -146,15 +123,34 @@ fun DashboardScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Spacer(modifier = Modifier.height(24.dp))
-                // Add more UI here if needed
+                Text(
+                    text = "CHERRY",
+                    fontFamily = elegantFont,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+
+                Text(
+                    text = "Welcome to Cherry – your destination for elegant, affordable fashion. Explore, wishlist and shop your favorite looks!",
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                )
             }
         }
     }
 }
+
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable

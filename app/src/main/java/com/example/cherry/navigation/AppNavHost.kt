@@ -13,7 +13,7 @@ import com.example.cherry.ui.theme.screens.products.UpdateproductScreen
 import com.example.cherry.ui.theme.screens.products.ViewProducts
 
 import com.example.cherry.ui.theme.screens.signup.SignUpScreen
-import com.example.cherry.ui.theme.screens.wishlist.WishlistScreen
+import com.example.shopcart.ui.screens.wishlist.WishlistScreen
 
 @Composable
 fun AppNavHost(navController:NavHostController = rememberNavController(),startDestination:String= ROUTE_SPLASH){
