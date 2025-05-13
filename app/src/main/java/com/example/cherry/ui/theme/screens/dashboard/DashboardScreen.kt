@@ -38,10 +38,11 @@ fun DashboardScreen(
     val accentColor = Color(0xFFD4A5A5)
 
     val dresses = listOf(
-        DressItem("Red Summer Dress", R.drawable.dress1),
-        DressItem("Blue Maxi Dress", R.drawable.dress2),
-        DressItem("Classic White", R.drawable.dress3),
-        DressItem("Floral Elegance", R.drawable.dress4)
+        DressItem("Elegant Dress", R.drawable.dress1),
+        DressItem("Chic Grad Dress", R.drawable.dress2),
+        DressItem("Elegant Lace", R.drawable.dress3),
+        DressItem("Lime Green Dress", R.drawable.dress4),
+        DressItem("Pink Floral Dress", R.drawable.dress5)
     )
 
     Scaffold(
@@ -123,9 +124,9 @@ fun DashboardScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // App title
                 Text(
                     text = "CHERRY",
                     fontFamily = elegantFont,
@@ -134,23 +135,74 @@ fun DashboardScreen(
                     color = Color.White
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(100.dp))
 
-
+                // Welcome message
                 Text(
                     text = "Welcome to Cherry – your destination for elegant, affordable fashion. Explore, wishlist and shop your favorite looks!",
-                    fontSize = 14.sp,
+                    fontFamily = elegantFont,
+                    fontSize = 15.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp)
                 )
+
+                Spacer(modifier = Modifier.height(60.dp)) // Extra breathing space
+
+                // Middle content placeholder
+                Spacer(modifier = Modifier.height(170.dp)) // You can insert a promo banner or CTA here
+
+                // Available Dresses heading
+                Text(
+                    text = "Available Dresses",
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Carousel of dresses
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(dresses) { dress ->
+                        Box(
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(180.dp)
+                                .background(Color.White)
+                                .border(1.dp, accentColor, shape = MaterialTheme.shapes.small)
+                        ) {
+                            Image(
+                                painter = painterResource(id = dress.imageRes),
+                                contentDescription = dress.name,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                            Text(
+                                text = dress.name,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .padding(8.dp)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 }
-
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
@@ -161,3 +213,4 @@ fun DashboardScreenPreview() {
         onLogOut = {}
     )
 }
+
